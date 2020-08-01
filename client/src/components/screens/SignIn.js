@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { UserContext } from "../../App";
 import M from "materialize-css";
 
 const SignIn = () => {
+  const { state, dispatch } = useContext(UserContext);
   const history = useHistory();
 
   const [password, setPassword] = useState("");
@@ -38,6 +40,7 @@ const SignIn = () => {
         } else {
           localStorage.setItem("jwt", data.token); //this for storing the token in local storage after signin
           localStorage.setItem("user", JSON.stringify(data.user)); // this for storing user details
+          dispatch({ type: "USER", payload: data.user });
           M.toast({
             html: "LoggedIn successfully",
             classes: "#43a047 green darken-1",

@@ -36,6 +36,8 @@ const SignIn = () => {
         if (data.error) {
           M.toast({ html: data.error, classes: "#c62828 red darken-3" });
         } else {
+          localStorage.setItem("jwt", data.token); //this for storing the token in local storage after signin
+          localStorage.setItem("user", JSON.stringify(data.user)); // this for storing user details
           M.toast({
             html: "LoggedIn successfully",
             classes: "#43a047 green darken-1",

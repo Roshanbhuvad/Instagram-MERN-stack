@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../../App";
 
 const Profile = () => {
+  const [mypics, setPics] = useState([]);
+  const { state, dispatch } = useContext(UserContext);
+  //console.log(state)
+  useEffect(() => {
+    fetch("/mypost", {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        //console.log(result);
+        setPics(result.mypost);
+      });
+  }, []); // I am passing empty dependency array because I want to get this fire when component is mounted first
   return (
     <div style={{ maxWidth: "550px", margin: "0px auto" }}>
       <div
@@ -19,7 +35,7 @@ const Profile = () => {
           />
         </div>
         <div>
-          <h4>Roshan Bhuvad</h4>
+          <h4>{state ? state.name : "loading"}</h4>
           <div
             style={{
               display: "flex",
@@ -35,46 +51,16 @@ const Profile = () => {
       </div>
 
       <div className="gallery">
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1550927407-50e2bd128b81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
+        {mypics.map((item) => {
+          return (
+            <img
+              key={item._id}
+              className="item"
+              src={item.photo}
+              alt={item.title}
+            />
+          );
+        })}
       </div>
     </div>
   );

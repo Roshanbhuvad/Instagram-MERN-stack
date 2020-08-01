@@ -18,7 +18,7 @@ const Routing = () => {
     //console.log(typeof user, user);
     if (user) {
       dispatch({ type: "USER", payload: user });
-      history.push("/");
+      history.push("/"); // this history code require to check whether is logged in or not according to this I redirect to new user to signin or signup pages
     } else {
       history.push("/signin");
     }

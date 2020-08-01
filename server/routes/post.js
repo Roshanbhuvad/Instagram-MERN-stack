@@ -6,7 +6,7 @@ const requireLogin = require("../middleware/requireLogin");
 /*router.get("/protected", requireLogin, (req, res) => {
   res.send("hello usr");
 });*/
-router.get("/allpost", (req, res) => {
+router.get("/allpost", requireLogin, (req, res) => {
   Post.find()
     .populate("postedBy", "_id name")
     .then((posts) => {

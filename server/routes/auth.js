@@ -12,7 +12,7 @@ const requireLogin = require("../middleware/requireLogin");
 }); */
 
 router.post("/signup", (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, pic } = req.body;
   if (!email || !password || !name) {
     return res.status(422).json({ error: "Please add all the fields" });
   }
@@ -28,6 +28,7 @@ router.post("/signup", (req, res) => {
           email,
           password: hashedPassword,
           name,
+          pic,
         });
         user
           .save()
@@ -59,8 +60,11 @@ router.post("/signin", (req, res) => {
         if (doMatch) {
           //res.json({ message: "Successfully logged in" });
           const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
-          const { _id, name, email } = savedUser;
-          res.json({ token, user: { _id, name, email } });
+          const { _id, name, email, followers, following, pic } = savedUser;
+          res.json({
+            token,
+            user: { _id, name, email, followers, following, pic },
+          });
         } else {
           return res.status(422).json({ error: "Invalid Email or Password" });
         }

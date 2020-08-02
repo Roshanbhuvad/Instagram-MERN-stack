@@ -131,4 +131,20 @@ router.delete("/deletepost/:postId", requireLogin, (req, res) => {
       }
     });
 });
+
+router.get("/getsubpost", requireLogin, (req, res) => {
+  // get me the subscriber user post, The post created by the the user whom I followed
+
+  //below code is some kind of python code if postedBy in following  -- it means who has posted the post So I am following that user or not
+  Post.find({ postedBy: { $in: req.user.following } })
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 module.exports = router;

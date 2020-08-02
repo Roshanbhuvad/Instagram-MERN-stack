@@ -62,7 +62,7 @@ router.post("/signin", (req, res) => {
           const { _id, name, email } = savedUser;
           res.json({ token, user: { _id, name, email } });
         } else {
-          return res.send(422).json({ error: "Invalid Email or Password" });
+          return res.status(422).json({ error: "Invalid Email or Password" });
         }
       })
       .catch((err) => {

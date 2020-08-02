@@ -111,4 +111,24 @@ router.put("/comment", requireLogin, (req, res) => {
       }
     });
 });
+router.delete("/deletepost/:postId", requireLogin, (req, res) => {
+  Post.findOne({ _id: req.params.postId })
+    .populate("postedBy", "_id")
+    .exec((err, post) => {
+      if (err || !post) {
+        return res.status(422).json({ error: err });
+      }
+      if (post.postedBy._id.toString() === req.user._id.toString()) {
+        //we are comparing if the delete post requested from logged in user or not
+        post
+          .remove()
+          .then((result) => {
+            res.json(result);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+});
 module.exports = router;
